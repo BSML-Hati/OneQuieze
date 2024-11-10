@@ -1,6 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.apollo)
+}
+
+apollo {
+    service("service") {
+        packageName.set("fr.upjv.onequieze")
+        introspection {
+            endpointUrl.set("https://graphql.anilist.co/graphql")
+            schemaFile.set(file("src/main/graphql/schema.graphqls"))
+        }
+    }
 }
 
 android {
@@ -50,7 +61,8 @@ android {
 }
 
 dependencies {
-
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation(libs.coil)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -60,6 +72,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -67,4 +80,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.apollo.runtime)
 }

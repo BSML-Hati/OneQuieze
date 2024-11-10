@@ -8,7 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import fr.upjv.onequieze.R
 
 
 @Composable
@@ -24,15 +26,15 @@ fun MainScreen(
             modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Thomas Lambert & Pierre Beaubecq")
+            Text(stringResource(R.string.owner))
             Button(content = {
-                Text("Jeu", fontSize = 25.sp)
+                Text(stringResource(R.string.play), fontSize = 25.sp)
             }, onClick = { onGameButtonClick() })
             Button(content = {
-                Text("Scoreboard", fontSize = 25.sp)
+                Text(stringResource(R.string.scoreboard), fontSize = 25.sp)
             }, onClick = { onScoreboardButtonClick() })
             Button(content = {
-                Text("User", fontSize = 25.sp)
+                Text(stringResource(R.string.user), fontSize = 25.sp)
             }, onClick = { onUserButtonClick() })
         }
     }

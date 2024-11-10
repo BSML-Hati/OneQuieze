@@ -24,16 +24,16 @@ object NavigationPath {
 
 
 fun NavGraphBuilder.addMainScreenNav(
-    onGameButtonClick: () -> Unit, onScoreboardButtonClick: () -> Unit, onUserButtonClick: () -> Unit,
+    onGameButtonClick: () -> Unit,
+    onScoreboardButtonClick: () -> Unit,
+    onUserButtonClick: () -> Unit,
 ) {
     composable(
         route = NavigationPath.MAIN_SCREEN
     ) {
-        MainScreen(
-            onGameButtonClick = { onGameButtonClick()},
-            onScoreboardButtonClick = {onScoreboardButtonClick()},
-            onUserButtonClick = {onUserButtonClick()}
-        )
+        MainScreen(onGameButtonClick = { onGameButtonClick() },
+            onScoreboardButtonClick = { onScoreboardButtonClick() },
+            onUserButtonClick = { onUserButtonClick() })
     }
 }
 
@@ -69,14 +69,15 @@ fun NavGraphBuilder.addScoreBoardScreenNavigation(navController: NavController) 
     }
 }
 
-fun NavGraphBuilder.addGameScreenNavigation(navController: NavController) {
+fun NavGraphBuilder.addGameScreenNavigation(
+    navController: NavController, onScoreboardButtonClick: () -> Unit
+) {
     composable(
         route = NavigationPath.GAME_SCREEN,
     ) {
-        GameScreen(navController)
+        GameScreen(navController, onScoreboardButtonClick)
     }
 }
-
 
 
 @Composable
@@ -87,13 +88,14 @@ fun HomeNavHost(
         navController = navController,
         startDestination = NavigationPath.MAIN_SCREEN,
     ) {
-        //ajout des fonctions pour naviguer
-        addMainScreenNav(onGameButtonClick = {navController.navigate(NavigationPath.GAME_SCREEN)},
-            onScoreboardButtonClick = {navController.navigate(NavigationPath.SCOREBOARD_SCREEN)},
-            onUserButtonClick = {navController.navigate(NavigationPath.USER_SCREEN)})
+
+        addMainScreenNav(onGameButtonClick = { navController.navigate(NavigationPath.GAME_SCREEN) },
+            onScoreboardButtonClick = { navController.navigate(NavigationPath.SCOREBOARD_SCREEN) },
+            onUserButtonClick = { navController.navigate(NavigationPath.USER_SCREEN) })
         addLoginScreenNavigation(navController = navController)
         addRegisterScreenNavigation(navController = navController)
-        addGameScreenNavigation(navController = navController)
+        addGameScreenNavigation(navController = navController,
+            onScoreboardButtonClick = { navController.navigate(NavigationPath.SCOREBOARD_SCREEN) })
         addScoreBoardScreenNavigation(navController = navController)
         addUserScreenNavigation(navController = navController)
     }

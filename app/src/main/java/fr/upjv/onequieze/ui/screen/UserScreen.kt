@@ -17,8 +17,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import fr.upjv.onequieze.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +28,7 @@ fun UserScreen(
     navController: NavController,
 ) {
     Scaffold(topBar = {
-        TopAppBar(title = { Text("User") }, navigationIcon = {
+        TopAppBar(title = { Text(stringResource(R.string.user)) }, navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
@@ -47,7 +49,7 @@ private fun MyGameScreen(modifier: Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text("User Thomas Lambert & Pierre Beaubecq")
+            Text(stringResource(R.string.owner))
         }
     }
 }

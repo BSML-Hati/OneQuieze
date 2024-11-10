@@ -1,0 +1,36 @@
+query MediaNameQuery($mediaId: Int!) {
+    Media(id: $mediaId) {
+        id
+        title {
+            english
+            native
+        }
+    }
+}
+
+query TotalCharactersCountQuery($mediaId: Int!) {
+    Media(id: $mediaId) {
+        characters {
+            pageInfo {
+                total
+            }
+        }
+    }
+}
+
+query CharacterQuery($mediaId: Int!, $page: Int!) {
+    Media(id: $mediaId) {
+        characters(page: $page) {
+            nodes {
+                id
+                name {
+                    full
+                }
+                image {
+                    medium
+                    large
+                }
+            }
+        }
+    }
+}

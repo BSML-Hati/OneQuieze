@@ -26,10 +26,11 @@ import fr.upjv.onequieze.R
 @Composable
 fun ScoreboardScreen(
     navController: NavController,
+    onMainScreenButtonClick: () -> Unit,
 ) {
     Scaffold(topBar = {
         TopAppBar(title = { Text(stringResource(R.string.scoreboard)) }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
+            IconButton(onClick = { onMainScreenButtonClick() }) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
         })

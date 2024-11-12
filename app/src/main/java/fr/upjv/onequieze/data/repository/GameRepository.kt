@@ -101,10 +101,14 @@ suspend fun matchCharacter(
     onScoreUpdate: (Int) -> Unit,
     onLifeUpdate: (Int) -> Unit
 ): Boolean {
-    /*if (nameInput != charName) {
+    if (nameInput != charName) {
         val isGameOver = isGameOver(life, onLifeUpdate)
         if (isGameOver) return false
-    }*/
+        else {
+            refreshCharacter(mediaId, character, previouslyFetchedCharacters)
+            return true
+        }
+    }
     onScoreUpdate(score + 1)
     refreshCharacter(mediaId, character, previouslyFetchedCharacters)
     return true

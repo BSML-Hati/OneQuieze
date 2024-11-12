@@ -61,11 +61,11 @@ fun NavGraphBuilder.addUserScreenNavigation(navController: NavController) {
     }
 }
 
-fun NavGraphBuilder.addScoreBoardScreenNavigation(navController: NavController) {
+fun NavGraphBuilder.addScoreBoardScreenNavigation(navController: NavController, onMainScreenButtonClick: () -> Unit,) {
     composable(
         route = NavigationPath.SCOREBOARD_SCREEN,
     ) {
-        ScoreboardScreen(navController)
+        ScoreboardScreen(navController, onMainScreenButtonClick)
     }
 }
 
@@ -96,7 +96,7 @@ fun HomeNavHost(
         addRegisterScreenNavigation(navController = navController)
         addGameScreenNavigation(navController = navController,
             onScoreboardButtonClick = { navController.navigate(NavigationPath.SCOREBOARD_SCREEN) })
-        addScoreBoardScreenNavigation(navController = navController)
+        addScoreBoardScreenNavigation(navController = navController, onMainScreenButtonClick = {navController.navigate(NavigationPath.MAIN_SCREEN)})
         addUserScreenNavigation(navController = navController)
     }
 

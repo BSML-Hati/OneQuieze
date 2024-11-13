@@ -21,12 +21,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import fr.upjv.onequieze.R
+import fr.upjv.onequieze.ui.viewmodel.ScoreViewModel
+import fr.upjv.onequieze.ui.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScoreboardScreen(
     navController: NavController,
     onMainScreenButtonClick: () -> Unit,
+    scoreViewModel: ScoreViewModel,
+    userViewModel: UserViewModel
 ) {
     Scaffold(topBar = {
         TopAppBar(title = { Text(stringResource(R.string.scoreboard)) }, navigationIcon = {
@@ -35,12 +39,14 @@ fun ScoreboardScreen(
             }
         })
     }) { padding ->
-        MyGameScreen(Modifier.padding(padding))
+        MyGameScreen(Modifier.padding(padding),scoreViewModel,
+            userViewModel)
     }
 }
 
 @Composable
-private fun MyGameScreen(modifier: Modifier) {
+private fun MyGameScreen(modifier: Modifier,scoreViewModel: ScoreViewModel,
+                         userViewModel: UserViewModel) {
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
@@ -51,6 +57,7 @@ private fun MyGameScreen(modifier: Modifier) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text("Scoreboard Thomas Lambert & Pierre Beaubecq")
+            scoreViewModel.fetchUserScores()
         }
     }
 }

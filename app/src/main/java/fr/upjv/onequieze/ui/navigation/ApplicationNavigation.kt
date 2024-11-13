@@ -16,6 +16,8 @@ import fr.upjv.onequieze.ui.screen.ScoreboardScreen
 import fr.upjv.onequieze.ui.screen.UserScreen
 import fr.upjv.onequieze.ui.viewmodel.LoginViewModel
 import fr.upjv.onequieze.ui.viewmodel.RegisterViewModel
+import fr.upjv.onequieze.ui.viewmodel.ScoreViewModel
+import fr.upjv.onequieze.ui.viewmodel.UserViewModel
 
 
 object NavigationPath {
@@ -42,13 +44,17 @@ fun NavGraphBuilder.addMainScreenNav(
     }
 }
 
-fun NavGraphBuilder.addLoginScreenNavigation(navController: NavController, loginViewModel: LoginViewModel) {
+fun NavGraphBuilder.addLoginScreenNavigation(
+    navController: NavController, loginViewModel: LoginViewModel
+) {
     composable(route = NavigationPath.LOGIN_SCREEN) {
         LoginScreen(navController, loginViewModel)
     }
 }
 
-fun NavGraphBuilder.addRegisterScreenNavigation(navController: NavController, registerViewModel: RegisterViewModel) {
+fun NavGraphBuilder.addRegisterScreenNavigation(
+    navController: NavController, registerViewModel: RegisterViewModel
+) {
     composable(route = NavigationPath.REGISTER_SCREEN) {
         RegisterScreen(navController, registerViewModel)
     }
@@ -65,21 +71,26 @@ fun NavGraphBuilder.addUserScreenNavigation(navController: NavController) {
 fun NavGraphBuilder.addScoreBoardScreenNavigation(
     navController: NavController,
     onMainScreenButtonClick: () -> Unit,
+    scoreViewModel: ScoreViewModel,
+    userViewModel: UserViewModel
 ) {
     composable(
         route = NavigationPath.SCOREBOARD_SCREEN,
     ) {
-        ScoreboardScreen(navController, onMainScreenButtonClick)
+        ScoreboardScreen(navController, onMainScreenButtonClick, scoreViewModel, userViewModel)
     }
 }
 
 fun NavGraphBuilder.addGameScreenNavigation(
-    navController: NavController, onScoreboardButtonClick: () -> Unit
+    navController: NavController,
+    onScoreboardButtonClick: () -> Unit,
+    scoreViewModel: ScoreViewModel,
+    userViewModel: UserViewModel
 ) {
     composable(
         route = NavigationPath.GAME_SCREEN,
     ) {
-        GameScreen(navController, onScoreboardButtonClick)
+        GameScreen(navController, onScoreboardButtonClick, scoreViewModel, userViewModel)
     }
 }
 
@@ -88,7 +99,9 @@ fun NavGraphBuilder.addGameScreenNavigation(
 fun HomeNavHost(
     navController: NavHostController = rememberNavController(),
     loginViewModel: LoginViewModel,
-    registerViewModel: RegisterViewModel
+    registerViewModel: RegisterViewModel,
+    scoreViewModel: ScoreViewModel,
+    userViewModel: UserViewModel
 ) {
     NavHost(
         navController = navController,
@@ -100,11 +113,14 @@ fun HomeNavHost(
             onUserButtonClick = { navController.navigate(NavigationPath.USER_SCREEN) })
         addLoginScreenNavigation(navController = navController, loginViewModel)
         addRegisterScreenNavigation(navController = navController, registerViewModel)
-        addGameScreenNavigation(navController = navController,
-            onScoreboardButtonClick = { navController.navigate(NavigationPath.SCOREBOARD_SCREEN) })
-        addScoreBoardScreenNavigation(
+        addGameScreenNavigation(
             navController = navController,
-            onMainScreenButtonClick = { navController.navigate(NavigationPath.MAIN_SCREEN) })
+            onScoreboardButtonClick = { navController.navigate(NavigationPath.SCOREBOARD_SCREEN) },
+            scoreViewModel = scoreViewModel,
+            userViewModel = userViewModel
+        )
+        addScoreBoardScreenNavigation(navController = navController,
+            onMainScreenButtonClick = { navController.navigate(NavigationPath.MAIN_SCREEN) }, scoreViewModel = scoreViewModel, userViewModel = userViewModel)
         addUserScreenNavigation(navController = navController)
     }
 

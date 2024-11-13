@@ -46,6 +46,8 @@ import fr.upjv.onequieze.TotalCharactersCountQuery
 import fr.upjv.onequieze.data.repository.isGameOver
 import fr.upjv.onequieze.data.repository.matchCharacter
 import fr.upjv.onequieze.data.repository.refreshCharacter
+import fr.upjv.onequieze.ui.viewmodel.ScoreViewModel
+import fr.upjv.onequieze.ui.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 
@@ -56,6 +58,8 @@ var totalCharactersResponse: ApolloResponse<TotalCharactersCountQuery.Data>? = n
 fun GameScreen(
     navController: NavController,
     onScoreboardButtonClick: () -> Unit,
+    scoreViewModel: ScoreViewModel,
+    userViewModel: UserViewModel
 ) {
     Scaffold(topBar = {
         TopAppBar(title = { Text("Jeu de quieze") }, navigationIcon = {
@@ -64,12 +68,17 @@ fun GameScreen(
             }
         })
     }) { padding ->
-        MyGameScreen(Modifier.padding(padding),onScoreboardButtonClick)
+        MyGameScreen(Modifier.padding(padding), onScoreboardButtonClick, scoreViewModel, userViewModel)
     }
 }
 
 @Composable
-private fun MyGameScreen(modifier: Modifier, onScoreboardButtonClick: () -> Unit) {
+private fun MyGameScreen(
+    modifier: Modifier,
+    onScoreboardButtonClick: () -> Unit,
+    scoreViewModel: ScoreViewModel,
+    userViewModel: UserViewModel
+) {
     val character = remember { mutableStateOf<CharacterQuery.Node?>(null) }
     val mediaId = 21
     val scope = rememberCoroutineScope()
@@ -78,6 +87,7 @@ private fun MyGameScreen(modifier: Modifier, onScoreboardButtonClick: () -> Unit
     var life by remember { mutableIntStateOf(3) }
     var showGameOver by remember { mutableStateOf(false) }
     var score by remember { mutableIntStateOf(0) }
+    val userId by remember { mutableStateOf(userViewModel.userId) }
 
     LaunchedEffect(Unit) {
         refreshCharacter(mediaId, character, previouslyFetchedCharacters)
@@ -135,6 +145,7 @@ private fun MyGameScreen(modifier: Modifier, onScoreboardButtonClick: () -> Unit
                             previouslyFetchedCharacters,
                             onScoreUpdate = { newScore -> score = newScore },
                             onLifeUpdate = { newLife -> life = newLife })
+                        nameInput = ""
                         if (!isGameOver) showGameOver = true
                     }
 
@@ -156,6 +167,7 @@ private fun MyGameScreen(modifier: Modifier, onScoreboardButtonClick: () -> Unit
                             showGameOver = true
                         }
                     }
+                    nameInput = ""
                 },
             ) {
                 Text(stringResource(R.string.skip_game_answer))
@@ -164,10 +176,16 @@ private fun MyGameScreen(modifier: Modifier, onScoreboardButtonClick: () -> Unit
         }
         if (showGameOver) {
             showGameOverPopup(score,
-                onScoreUpdate = {newScore -> score = newScore},
+                onScoreUpdate = { newScore -> score = newScore },
                 onLifeUpdate = { newLife -> life = newLife },
                 onDismiss = { showGameOver = false },
-                onConfirm = { onScoreboardButtonClick() })
+                onConfirm = {
+                    userId?.let {
+                        scoreViewModel.saveGame(
+                            it, score
+                        )
+                    };onScoreboardButtonClick()
+                })
         }
     }
 }
@@ -175,7 +193,11 @@ private fun MyGameScreen(modifier: Modifier, onScoreboardButtonClick: () -> Unit
 
 @Composable
 fun showGameOverPopup(
-    score: Int, onScoreUpdate: (Int) -> Unit, onLifeUpdate: (Int) -> Unit, onDismiss: () -> Unit, onConfirm: () -> Unit
+    score: Int,
+    onScoreUpdate: (Int) -> Unit,
+    onLifeUpdate: (Int) -> Unit,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
 ) {
     AlertDialog(onDismissRequest = {
         onLifeUpdate(3)

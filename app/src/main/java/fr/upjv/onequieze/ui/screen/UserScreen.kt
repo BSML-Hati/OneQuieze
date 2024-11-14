@@ -17,15 +17,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,44 +40,46 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import fr.upjv.onequieze.ui.navigation.NavigationPath
 import fr.upjv.onequieze.ui.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserScreen(
-    navController: NavController,
-    viewModel: UserViewModel = viewModel()
+    navController: NavController, viewModel: UserViewModel = viewModel()
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Profile") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = {
-                        viewModel.logout()
-                        navController.navigate("login") {
-                            popUpTo("main") { inclusive = true }
-                        }
-                    }) {
-                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Logout")
-                    }
-                }
-            )
-        }
-    ) { padding ->
+    Scaffold(topBar = {
+        TopAppBar(title = { Text("Profile", color = Color.White) }, navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.White
+                )
+            }
+        }, actions = {
+            IconButton(onClick = {
+                viewModel.logout()
+                navController.navigate(NavigationPath.LOGIN_SCREEN)
+            }) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ExitToApp,
+                    contentDescription = "Logout",
+                    tint = Color.White
+                )
+            }
+        }, colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color(0xFF9A1A19)
+        )
+        )
+    }) { padding ->
         ProfileContent(Modifier.padding(padding), viewModel)
     }
 }
 
 @Composable
 private fun ProfileContent(
-    modifier: Modifier,
-    viewModel: UserViewModel
+    modifier: Modifier, viewModel: UserViewModel
 ) {
     val username by viewModel.username.collectAsState()
     val profileImageUrl by viewModel.profileImageUrl.collectAsState()
@@ -94,28 +94,31 @@ private fun ProfileContent(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(Color(0xFF9A1A19))
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         ProfileImage(profileImageUrl, onClick = { imagePickerLauncher.launch("image/*") })
 
-        Text(text = "Username: ${username ?: "Loading..."}", style = MaterialTheme.typography.headlineMedium)
-        Text(text = "ID: $userId", style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp, color = Color.Gray))
+        Text(
+            text = "Username : ${username ?: "Loading..."}", color = Color.White, fontSize = 20.sp
+        )
+        Text(
+            text = "ID : $userId", fontSize = 14.sp, color = Color.Gray
+        )
     }
 }
 
 @Composable
 private fun ProfileImage(profileImageUrl: String?, onClick: () -> Unit) {
-    Box(
-        contentAlignment = Alignment.Center,
+    Box(contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(150.dp)
             .shadow(10.dp, CircleShape)
             .clip(CircleShape)
-            .background(Color.LightGray)
-            .clickable { onClick() }
-    ) {
+            .background(Color(0xFF405A9E))
+            .clickable { onClick() }) {
         if (profileImageUrl != null) {
             Image(
                 painter = rememberAsyncImagePainter(profileImageUrl),

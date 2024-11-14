@@ -2,7 +2,7 @@ package fr.upjv.onequieze.ui.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import fr.upjv.onequieze.firebase.FirebaseConfig
+import fr.upjv.onequieze.data.firebase.FirebaseConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -18,7 +18,6 @@ class UserViewModel : ViewModel() {
     val profileImageUrl: StateFlow<String?> get() = _profileImageUrl
 
     private val _errorMessage = MutableStateFlow<String?>(null)
-    val errorMessage: StateFlow<String?> get() = _errorMessage
 
     val userId: String? = auth.currentUser?.uid
 
@@ -28,12 +27,10 @@ class UserViewModel : ViewModel() {
 
     private fun loadUserProfile() {
         val userId = auth.currentUser?.uid ?: return
-        firestore.collection("users").document(userId).get()
-            .addOnSuccessListener { document ->
+        firestore.collection("users").document(userId).get().addOnSuccessListener { document ->
                 _username.value = document.getString("username")
                 _profileImageUrl.value = document.getString("profileImageUrl")
-            }
-            .addOnFailureListener { exception ->
+            }.addOnFailureListener { exception ->
                 _errorMessage.value = exception.message
             }
     }
@@ -54,8 +51,7 @@ class UserViewModel : ViewModel() {
 
     private fun saveProfileImageUrl(profileImageUrl: String) {
         val userId = auth.currentUser?.uid ?: return
-        firestore.collection("users").document(userId)
-            .update("profileImageUrl", profileImageUrl)
+        firestore.collection("users").document(userId).update("profileImageUrl", profileImageUrl)
             .addOnFailureListener { exception ->
                 _errorMessage.value = exception.message
             }

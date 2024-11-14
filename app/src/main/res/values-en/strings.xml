@@ -16,4 +16,6 @@
     <string name="your_score">Your score : %1$s</string>
     <string name="ok">OK</string>
     <string name="play_again">Play again</string>
+    <string name="incorrect_name">Incorrect name</string>
+    <string name="you_got_it">You got it !</string>
 </resources>

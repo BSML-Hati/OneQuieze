@@ -58,7 +58,6 @@ import fr.upjv.onequieze.data.repository.GameRepository
 import fr.upjv.onequieze.data.repository.isGameOver
 import fr.upjv.onequieze.data.repository.matchCharacter
 import fr.upjv.onequieze.data.repository.refreshCharacter
-import fr.upjv.onequieze.ui.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 
@@ -74,17 +73,20 @@ fun GameScreen(
     var score by remember { mutableIntStateOf(0) }
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text("Jeu de quieze", color = Color.White) }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
-            }
-        }, colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFF9A1A19)
-        )
+        TopAppBar(
+            title = { Text(stringResource(R.string.quieze_game), color = Color.White) },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back),
+                        tint = Color.White
+                    )
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color(0xFF9A1A19)
+            )
         )
     }) { padding ->
         MyGameScreen(Modifier.padding(padding),
@@ -94,9 +96,7 @@ fun GameScreen(
                 val finalScore = score
                 gameRepository.saveGameScore(score = finalScore,
                     onSuccess = { onScoreboardButtonClick() },
-                    onFailure = { exception ->
-                        println("Erreur lors de l'enregistrement du score : ${exception.message}")
-                    })
+                    onFailure = {})
             })
     }
 }
@@ -106,7 +106,7 @@ fun GameScreen(
 private fun MyGameScreen(
     modifier: Modifier, score: Int, onGameOver: () -> Unit, onScoreUpdate: (Int) -> Unit
 ) {
-    val context = LocalContext.current
+    val context = LocalContext.current.applicationContext
     val mediaPlayer = remember { MediaPlayer.create(context, R.raw.binks) }
     var isPlaying by remember { mutableStateOf(false) }
     val character = remember { mutableStateOf<CharacterQuery.Node?>(null) }
@@ -174,7 +174,8 @@ private fun MyGameScreen(
                     }
                 }
 
-                TextField(value = nameInput,
+                TextField(
+                    value = nameInput,
                     onValueChange = { newInput -> nameInput = newInput },
                     placeholder = { Text(stringResource(R.string.paceholder_what_name)) },
                     singleLine = true,

@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import fr.upjv.onequieze.R
 import fr.upjv.onequieze.data.firebase.repository.AuthRepository
@@ -48,7 +47,6 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScoreboardScreen(
-    navController: NavController,
     onMainScreenButtonClick: () -> Unit,
     gameRepository: GameRepository = GameRepository(AuthRepository())
 ) {
@@ -69,7 +67,7 @@ fun ScoreboardScreen(
                     IconButton(onClick = { onMainScreenButtonClick() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
@@ -92,7 +90,7 @@ fun ScoreboardScreen(
                 if (scores.isEmpty()) {
                     item {
                         Text(
-                            "Aucun score disponible",
+                            stringResource(R.string.loading_score_or_no_score_registered),
                             color = Color.White,
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
@@ -105,7 +103,7 @@ fun ScoreboardScreen(
             }
 
             Text(
-                text = "Scoreboard Thomas Lambert & Pierre Beaubecq",
+                text = stringResource(R.string.owner),
                 color = Color.White,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -117,8 +115,9 @@ fun ScoreboardScreen(
 
 @Composable
 fun ScoreItem(score: GameScore) {
-    val formattedDate =
-        SimpleDateFormat("dd MMM yyyy 'à' HH:mm", Locale.getDefault()).format(score.date)
+    val formattedDate = SimpleDateFormat(
+        stringResource(R.string.datePattern), Locale.getDefault()
+    ).format(score.date)
 
     Card(
         modifier = Modifier
@@ -142,16 +141,16 @@ fun ScoreItem(score: GameScore) {
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(score.profileImageUrl),
-                    contentDescription = "Photo de profil",
+                    contentDescription = stringResource(R.string.profile_image),
                     modifier = Modifier
                         .size(70.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
-                Text(text = "Score: ${score.score}", color = Color.White)
+                Text(text = "${stringResource(R.string.score)} ${score.score}", color = Color.White)
             }
             Text(
-                text = "Date: $formattedDate",
+                text = "${stringResource(R.string.date)} $formattedDate",
                 color = Color.White,
                 style = MaterialTheme.typography.bodySmall
             )

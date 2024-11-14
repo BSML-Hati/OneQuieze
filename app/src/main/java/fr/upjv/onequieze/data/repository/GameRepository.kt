@@ -1,7 +1,6 @@
 package fr.upjv.onequieze.data.repository
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import com.apollographql.apollo.api.ApolloResponse
@@ -137,7 +136,7 @@ suspend fun matchCharacter(
     onScoreUpdate: (Int) -> Unit,
     onLifeUpdate: (Int) -> Unit
 ): Boolean {
-    if (nameInput != charName) {
+    if (nameInput.lowercase().trim() != charName.lowercase().trim()) {
         Toast.makeText(context, context.getString(R.string.incorrect_name), Toast.LENGTH_SHORT)
             .show()
         val isGameOver = isGameOver(life, onLifeUpdate)

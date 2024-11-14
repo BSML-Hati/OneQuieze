@@ -47,12 +47,12 @@ fun MainScreen(
 
             Image(
                 painter = painterResource(id = R.drawable.onequieze),
-                contentDescription = "App Logo",
+                contentDescription = stringResource(R.string.app_logo),
                 modifier = Modifier.size(240.dp)
             )
 
             Text(
-                text = "One Quieze",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.White
             )

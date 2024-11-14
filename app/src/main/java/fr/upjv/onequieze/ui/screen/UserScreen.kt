@@ -35,11 +35,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import fr.upjv.onequieze.R
 import fr.upjv.onequieze.ui.navigation.NavigationPath
 import fr.upjv.onequieze.ui.viewmodel.UserViewModel
 
@@ -49,28 +51,31 @@ fun UserScreen(
     navController: NavController, viewModel: UserViewModel = viewModel()
 ) {
     Scaffold(topBar = {
-        TopAppBar(title = { Text("Profile", color = Color.White) }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
-            }
-        }, actions = {
-            IconButton(onClick = {
-                viewModel.logout()
-                navController.navigate(NavigationPath.LOGIN_SCREEN)
-            }) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ExitToApp,
-                    contentDescription = "Logout",
-                    tint = Color.White
-                )
-            }
-        }, colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFF9A1A19)
-        )
+        TopAppBar(title = { Text(stringResource(R.string.profile), color = Color.White) },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back),
+                        tint = Color.White
+                    )
+                }
+            },
+            actions = {
+                IconButton(onClick = {
+                    viewModel.logout()
+                    navController.navigate(NavigationPath.LOGIN_SCREEN)
+                }) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ExitToApp,
+                        contentDescription = stringResource(R.string.logout),
+                        tint = Color.White
+                    )
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color(0xFF9A1A19)
+            )
         )
     }) { padding ->
         ProfileContent(Modifier.padding(padding), viewModel)
@@ -102,10 +107,12 @@ private fun ProfileContent(
         ProfileImage(profileImageUrl, onClick = { imagePickerLauncher.launch("image/*") })
 
         Text(
-            text = "Username : ${username ?: "Loading..."}", color = Color.White, fontSize = 20.sp
+            text = "${stringResource(R.string.username)} ${username ?: stringResource(R.string.loading)}",
+            color = Color.White,
+            fontSize = 20.sp
         )
         Text(
-            text = "ID : $userId", fontSize = 14.sp, color = Color.Gray
+            text = "${stringResource(R.string.id)} : $userId", fontSize = 14.sp, color = Color.Gray
         )
     }
 }
@@ -122,7 +129,7 @@ private fun ProfileImage(profileImageUrl: String?, onClick: () -> Unit) {
         if (profileImageUrl != null) {
             Image(
                 painter = rememberAsyncImagePainter(profileImageUrl),
-                contentDescription = "Profile Image",
+                contentDescription = stringResource(R.string.profile_image),
                 modifier = Modifier
                     .size(140.dp)
                     .clip(CircleShape)
@@ -133,7 +140,7 @@ private fun ProfileImage(profileImageUrl: String?, onClick: () -> Unit) {
 
             Icon(
                 imageVector = Icons.Default.AccountCircle,
-                contentDescription = "Default Profile Image",
+                contentDescription = stringResource(R.string.default_profile_image),
                 tint = Color.Gray,
                 modifier = Modifier.size(140.dp)
             )

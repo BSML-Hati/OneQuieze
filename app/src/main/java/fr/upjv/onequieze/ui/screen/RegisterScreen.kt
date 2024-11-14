@@ -35,11 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import fr.upjv.onequieze.R
 import fr.upjv.onequieze.ui.navigation.NavigationPath
 import fr.upjv.onequieze.ui.viewmodel.RegisterViewModel
 import java.io.InputStream
@@ -77,7 +79,7 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel) {
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Register",
+                text = stringResource(R.string.register),
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.White
             )
@@ -90,7 +92,7 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel) {
                 profileImageUri?.let {
                     Image(
                         painter = rememberAsyncImagePainter(it),
-                        contentDescription = "Profile Image",
+                        contentDescription = stringResource(R.string.profile_image),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
@@ -99,7 +101,7 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel) {
 
             TextField(value = username,
                 onValueChange = { username = it },
-                placeholder = { Text("Nom d'utilisateur") },
+                placeholder = { Text(stringResource(R.string.username)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.textFieldColors(
@@ -118,7 +120,7 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel) {
 
             TextField(value = email,
                 onValueChange = { email = it },
-                placeholder = { Text("Email") },
+                placeholder = { Text(stringResource(R.string.mail)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.textFieldColors(
@@ -137,7 +139,7 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel) {
 
             TextField(value = password,
                 onValueChange = { password = it },
-                placeholder = { Text("Mot de passe") },
+                placeholder = { Text(stringResource(R.string.password)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 visualTransformation = PasswordVisualTransformation(),
@@ -164,11 +166,15 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel) {
                     .padding(horizontal = 32.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Register", fontSize = 18.sp, color = Color.White)
+                Text(stringResource(R.string.register), fontSize = 18.sp, color = Color.White)
             }
 
             TextButton(onClick = { navController.navigate(NavigationPath.LOGIN_SCREEN) }) {
-                Text("Already have an account? Login", fontSize = 18.sp, color = Color.White)
+                Text(
+                    stringResource(R.string.already_have_an_account_login),
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
             }
 
             errorMessage?.let {

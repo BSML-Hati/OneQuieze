@@ -17,7 +17,6 @@ import fr.upjv.onequieze.ui.screen.ScoreboardScreen
 import fr.upjv.onequieze.ui.screen.UserScreen
 import fr.upjv.onequieze.ui.viewmodel.LoginViewModel
 import fr.upjv.onequieze.ui.viewmodel.RegisterViewModel
-import fr.upjv.onequieze.ui.viewmodel.UserViewModel
 
 
 object NavigationPath {
@@ -69,14 +68,12 @@ fun NavGraphBuilder.addUserScreenNavigation(navController: NavController) {
 }
 
 fun NavGraphBuilder.addScoreBoardScreenNavigation(
-    navController: NavController,
-    onMainScreenButtonClick: () -> Unit,
-    gameRepository: GameRepository
+    onMainScreenButtonClick: () -> Unit, gameRepository: GameRepository
 ) {
     composable(
         route = NavigationPath.SCOREBOARD_SCREEN,
     ) {
-        ScoreboardScreen(navController, onMainScreenButtonClick, gameRepository)
+        ScoreboardScreen(onMainScreenButtonClick, gameRepository)
     }
 }
 
@@ -112,7 +109,6 @@ fun HomeNavHost(
         addGameScreenNavigation(navController = navController,
             onScoreboardButtonClick = { navController.navigate(NavigationPath.SCOREBOARD_SCREEN) })
         addScoreBoardScreenNavigation(
-            navController = navController,
             onMainScreenButtonClick = { navController.navigate(NavigationPath.MAIN_SCREEN) },
             gameRepository = gameRepository
         )

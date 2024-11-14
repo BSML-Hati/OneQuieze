@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,11 +59,11 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.onequieze),
-                contentDescription = "App Logo",
+                contentDescription = stringResource(R.string.app_logo),
                 modifier = Modifier.size(240.dp)
             )
             Text(
-                text = "One Quieze",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.White
             )
@@ -74,7 +75,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
             TextField(
                 value = email,
                 onValueChange = { email = it },
-                placeholder = { Text("Adresse mail") },
+                placeholder = { Text(stringResource(R.string.mail)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.textFieldColors(
@@ -94,7 +95,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
             TextField(
                 value = password,
                 onValueChange = { password = it },
-                placeholder = { Text("Mot de passe") },
+                placeholder = { Text(stringResource(R.string.password)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 visualTransformation = PasswordVisualTransformation(),
@@ -121,13 +122,17 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel) {
                     .padding(horizontal = 32.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Login", fontSize = 18.sp, color = Color.White)
+                Text(stringResource(R.string.login), fontSize = 18.sp, color = Color.White)
             }
 
             TextButton(
                 onClick = { navController.navigate(NavigationPath.REGISTER_SCREEN) },
             ) {
-                Text("Don't have an account? Register", fontSize = 18.sp, color = Color.White)
+                Text(
+                    stringResource(R.string.don_t_have_an_account_register),
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
             }
 
             errorMessage?.let {
